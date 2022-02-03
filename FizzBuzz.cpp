@@ -9,15 +9,15 @@ struct string_literal {
     constexpr static char value[] = {(Cs)..., 0};
 };
 
-template <char... digits>
+template <size_t... digits>
 struct to_chars {
     constexpr static auto value = string_literal<(digits+'0')..., '\n'>{};
 };
 
-template <char rem, char... digits>
+template <size_t rem, size_t... digits>
 struct to_string_literal : to_string_literal<rem / 10, rem % 10, digits...> {};
 
-template <char... digits>
+template <size_t... digits>
 struct to_string_literal<0, digits...> : to_chars<digits...> {};
 
 template <size_t n>
@@ -44,5 +44,5 @@ constexpr auto FizzBuzz() {
 int main() {
     []<size_t... Vs>(std::index_sequence<Vs...>){
         std::cout << (FizzBuzz<Vs+1>() + ...).value;
-    }(std::make_index_sequence<100>{});
+    }(std::make_index_sequence<256>{});
 }
